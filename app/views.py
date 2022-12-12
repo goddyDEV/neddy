@@ -51,6 +51,18 @@ def index(request):
 @login_required
 def dashboard(request):
     template = 'dashboard/index.html'
+    designer = Team.objects.filter(position="Designer").count()
+    photographer = Team.objects.filter(position="Photographer").count()
+    videographer = Team.objects.filter(position="Videographer").count()
+    order = Order.objects.all().count()
+    settings=Settings.objects.first()
+    context = {
+        'settings':settings,
+        'designer':designer,
+        'photographer':photographer,
+        'videographer':videographer,
+        'order':order
+    }
     return render(request, template, {})   
 
 
