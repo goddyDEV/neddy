@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    
+<!-- Mirrored from coderthemes.com/ubold/layouts/modern/crm-dashboard.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Jun 2022 10:56:17 GMT -->
+{% include 'includes/header.html' %}
+
+    <!-- body start -->
+<body class="loading" data-layout-mode="detached" data-layout-color="light" data-topbar-color="dark" data-menu-position="fixed" data-leftbar-color="light" data-leftbar-size='default' data-sidebar-user='true'>
+
+<!-- Begin page -->
+<div id="wrapper">
+
+<!-- Topbar Start -->
+{% include 'includes/topbar.html' %}
+<!-- end Topbar -->
+
+<!-- ========== Left Sidebar Start ========== -->
+{% include 'includes/sidebar.html' %}
+<!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+                        
+                       {% block content %}
+                       
+                       
+                       {% endblock content %}
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+                <!-- Footer Start -->
+               {% include 'includes/footer.html' %}
+                <!-- end Footer -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+    
+
+      {% include 'includes/script.html' %}
+        
+    </body>
+
+<!-- Mirrored from coderthemes.com/ubold/layouts/modern/crm-dashboard.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Jun 2022 10:56:17 GMT -->
+</html>

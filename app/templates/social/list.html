@@ -1,0 +1,121 @@
+{% extends 'master.html' %}
+{% load static %}
+{% load widget_tweaks %} 
+
+{% block content %}
+
+
+ <!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'app:dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Social Links</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Social Links</h4>
+        </div>
+    </div>
+</div>     
+<!-- end page title --> 
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row justify-content-between mb-2">
+                    <div class="col-auto">
+                       
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">
+                            {% comment %} <button type="button" class="btn btn-success waves-effect waves-light mb-2 me-1"  data-bs-toggle="modal" data-bs-target="#standard-modal" data-bs-placement="top" data-bs-title="Filter"><i class="mdi mdi-filter" data-bs-toggle="tooltip"  data-bs-placement="top" data-bs-title="Filter"></i></button> {% endcomment %}
+                            <button type="button" class="btn btn-success waves-effect waves-light mb-2" data-bs-toggle="modal" data-bs-target="#custom-modal">Add link</button>
+                        </div>
+                    </div><!-- end col-->
+                </div>
+
+                <div class="table-responsive">
+
+                     <table id="selection-datatable" class="table dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Link</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    
+                    
+                        <tbody>
+
+                       {% for data in link  %}
+                            <tr>
+                                <td>{{data.name}}</td>
+                                <td> {{data.link}}</td>
+                                 <td>
+                                    <a href="{% url 'app:edit-social' id=data.id %}" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                    <a href="{% url 'app:delete-social' id=data.id %}" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                            
+                        </tbody>
+                        </table>
+
+
+
+
+
+
+                  
+                </div>
+
+
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+
+    </div>
+</div>
+<!-- end row -->
+
+
+ <!-- Modal -->
+        <div class="modal fade" id="custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-light">
+                        <h4 class="modal-title" id="myCenterModalLabel">{{title}}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                             {% for hidden in form.hidden_fields %} 
+                            {{ hidden }} 
+                            {% endfor %}
+                           {% for field in form.visible_fields %}
+                            <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}<span
+                                class="text-danger">*</span></label> {{ field|add_class:'form-control' }} {% for error in field.errors %}
+                        <ul class="parsley-errors-list filled" id="parsley-id-27" aria-hidden="false">
+                            <li class="parsley-required">{{ error }}</li>
+                        </ul>
+                        {% endfor %}
+                    </div>
+                            {% endfor %}
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success waves-effect waves-light">Save</button>
+                             
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+{% endblock content %}
+
+
