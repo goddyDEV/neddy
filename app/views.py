@@ -13,17 +13,19 @@ def index(request):
     about=About.objects.first()
     settings=Settings.objects.first()
     category=Category.objects.all()
-    graphics = Service.objects.filter(category="Graphics")
-    photography = Service.objects.filter(category="Photography")
+    graphics = Service.objects.filter(category="Graphics")[:3]
+    photography = Service.objects.filter(category="Photography")[:3]
     videography = Service.objects.filter(category="Videography").first()
     team = Team.objects.filter(position="Managing Director").first()
     hero = Hero.objects.first()
     testmony = Testmony.objects.all()
-    facebook = SocialMedia.objects.filter(name="facebook")
-    instagram = SocialMedia.objects.filter(name="instagram")
-    twitter = SocialMedia.objects.filter(name="twitter")
-    linkedin = SocialMedia.objects.filter(name="linkedin")
-    tiktok = SocialMedia.objects.filter(name="tiktok")
+    facebook = SocialMedia.objects.filter(name="facebook").first()
+    instagram = SocialMedia.objects.filter(name="instagram").first()
+    twitter = SocialMedia.objects.filter(name="twitter").first()
+    linkedin = SocialMedia.objects.filter(name="linkedin").first()
+    tiktok = SocialMedia.objects.filter(name="tiktok").first()
+
+    print(facebook)
 
 
 
@@ -63,16 +65,25 @@ def dashboard(request):
         'videographer':videographer,
         'order':order
     }
-    return render(request, template, {})   
+    return render(request, template, context)   
 
 
 def get_about(request):
     template = 'main/mainpage/about.html'
     about=About.objects.first()
     settings=Settings.objects.first()
+    facebook = SocialMedia.objects.filter(name="facebook").first()
+    instagram = SocialMedia.objects.filter(name="instagram").first()
+    twitter = SocialMedia.objects.filter(name="twitter").first()
+    linkedin = SocialMedia.objects.filter(name="linkedin").first()
+    tiktok = SocialMedia.objects.filter(name="tiktok").first()
     context={
         'about':about,
-        'settings':settings
+        'settings':settings,'facebook':facebook,
+        'instagram':instagram,
+        'twitter':twitter,
+        'linkedin':linkedin,
+        'tiktok':tiktok,
     }
     return render(request, template, context)  
 
@@ -83,11 +94,20 @@ def get_product(request):
     photography = Service.objects.filter(category="Photography")
     videography = Service.objects.filter(category="Videography")
     settings=Settings.objects.first()
+    facebook = SocialMedia.objects.filter(name="facebook").first()
+    instagram = SocialMedia.objects.filter(name="instagram").first()
+    twitter = SocialMedia.objects.filter(name="twitter").first()
+    linkedin = SocialMedia.objects.filter(name="linkedin").first()
+    tiktok = SocialMedia.objects.filter(name="tiktok").first()
     context={
         'graphics':graphics,
         'photography':photography,
         'videography':videography,
-        'settings':settings
+        'settings':settings,'facebook':facebook,
+        'instagram':instagram,
+        'twitter':twitter,
+        'linkedin':linkedin,
+        'tiktok':tiktok,
     }
     return render(request, template, context) 
 
@@ -363,8 +383,13 @@ def  create_settings(request):
             return redirect("app:settings")
         else:
             messages.error(request,"Sorry Something is wrong")
-    setting = Settings.objects.first()  
-    about = About.objects.first()      
+    try:
+        setting = Settings.objects.first()
+        about = About.objects.first()
+    except ObjectDoesNotExist:
+        return  messages.error(request,"Create Setting and About First Before Editing")         
+
+             
     context = {
         'title':title,
         'form':form,
@@ -379,7 +404,10 @@ def  edit_settings(request):
     title = "Edit settings"  
     message = "settings is successfully edited" 
 
-    setting_id=Settings.objects.first()
+    try:
+        setting_id = Settings.objects.first()
+    except ObjectDoesNotExist:
+        return  messages.error(request,"Create Setting and About First Before Editing") 
 
     settings = get_object_or_404(Settings, id=setting_id.id)
 
