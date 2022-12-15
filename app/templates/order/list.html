@@ -21,7 +21,8 @@
 </div>     
 <!-- end page title --> 
 <div class="row">
-    <div class="col-lg-12">
+    {% include 'includes/alert.html' %}
+    <div class="col-lg-12 mt-3">
         <div class="card">
             <div class="card-body">
                 <div class="row justify-content-between mb-2">
@@ -62,13 +63,20 @@
                                 <td> {{data.date_start}}</td>
                                 <td> {{data.date_delivery}}</td>
                                 <td> {{data.status}}</td>
-                                <td> {{data.received_by}}</td>
+                                <td> {{data.received_by}}</td> 
                                 <td> {{data.created_date}}</td>
-                                 <td>
-                                    {% comment %} <a href="{% url 'contact:edit-contact' id=data.id %}" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                    <a href="{% url 'contact:delete-contact' id=data.id %}" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                    <a href="{% url 'contact:view-contact' id=data.id %}" class="action-icon"> <i class="mdi mdi-eye"></i></a> {% endcomment %}
-                                </td>
+                                    <td>
+                                        
+                                        
+                                        {% if not data.status == "Delivery" %}
+                                        <a href="{% url 'app:confirm_order' data.id %}" class="action-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept Order"> <i class="mdi mdi-checkbox-multiple-marked"></i></a>
+                                         <a href="{% url 'app:cancel_order' data.id %}" class="action-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Order"> <i class="mdi mdi-cancel"></i></a>
+                                         <a href="{% url 'app:complete_order' data.id %}" class="action-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Complete and Deliver Order"> <i class="mdi mdi-truck-delivery"></i></a>
+                                            
+                                        {% endif %}
+                                            
+                                       
+                                    </td>
                             </tr>
                         {% endfor %}
                             

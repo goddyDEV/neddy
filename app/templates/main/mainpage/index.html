@@ -499,21 +499,21 @@
               <div class="col">
                 <div class="counter">
                   <i class="fa fa-code fa-2x"></i>
-                  <h2 class="timer count-title count-number fs-2 fw-bold" data-to="100" data-speed="1500">10+</h2>
+                  <h2 class="timer count-title count-number fs-2 fw-bold" data-to="100" data-speed="1500">{{designer}}</h2>
                   <p class="count-text ">Designers</p>
                 </div>
               </div>
               <div class="col">
                 <div class="counter">
                   <i class="fa fa-coffee fa-2x"></i>
-                  <h2 class="timer count-title count-number fs-2 fw-bold" data-to="1700" data-speed="1500">10+</h2>
+                  <h2 class="timer count-title count-number fs-2 fw-bold" data-to="1700" data-speed="1500">{{photographer}}</h2>
                   <p class="count-text ">Photographers</p>
                 </div>
               </div>
               <div class="col">
                 <div class="counter">
                   <i class="fa fa-lightbulb-o fa-2x"></i>
-                  <h2 class="timer count-title count-number fs-2 fw-bold" data-to="11900" data-speed="1500">10+</h2>
+                  <h2 class="timer count-title count-number fs-2 fw-bold" data-to="11900" data-speed="1500">{{videographer}}</h2>
                   <p class="count-text ">Videographers</p>
                 </div>
               </div>
@@ -616,6 +616,7 @@
           </div>
 
           <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+            
             {% if form %}
 
              <form method="post" action="{% url 'app:create-order' %}"  class="php-email-form">
@@ -649,7 +650,12 @@
                 {% render_field form.date_delivery type="date" class="form-control" %}
               </div>
               <div class="my-3">
-                <div class="sent-message"></div>
+                
+                <div>
+
+                  {% include 'includes/alert.html' %}
+
+                </div>
               </div>
               <div class="text-center"><button type="submit">Send Message</button></div>
             </form>

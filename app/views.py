@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .forms import *
 from django.contrib import messages
+from datetime import date
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -25,7 +26,10 @@ def index(request):
     linkedin = SocialMedia.objects.filter(name="linkedin").first()
     tiktok = SocialMedia.objects.filter(name="tiktok").first()
 
-    print(facebook)
+    designer = Team.objects.filter(position="Designer").count()
+    photographer = Team.objects.filter(position="Photographer").count()
+    videographer = Team.objects.filter(position="Videographer").count()
+
 
 
 
@@ -45,7 +49,10 @@ def index(request):
         'twitter':twitter,
         'linkedin':linkedin,
         'tiktok':tiktok,
-        'team':team
+        'team':team,
+        'designer':designer,
+        'photographer':photographer,
+        'videographer':videographer,
     }  
     return render(request, template, context)
 
@@ -496,12 +503,18 @@ def delete_team(request, id):
 
 
 def create_order(request):
-    message = "Order is successfully created" 
+    message = "Order is successfully sent" 
     if request.method == "POST":
         form = OrderForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, message)
+            order=form.save(commit=False)
+            if order.date_start > order.date_delivery:
+                messages.error(request, "Sorry the delivery date is before the order date!")
+            elif order.date_start < date.today() :
+                messages.error(request, "Sorry the order date can not be the day before today!")
+            else:
+                order.save()
+                messages.success(request, message)
         else:
             messages.error(request,form.errors) 
             print(form.errors)
@@ -584,3 +597,27 @@ def delete_link(request, id):
     messages.success(request,message)
     return redirect('app:social') 
     
+@login_required
+def confirm_order(request,id):
+    order = get_object_or_404(Order,pk=id)
+    order.received_by = request.user
+    order.status = "On Progress"
+    order.save()
+    messages.success(request,"Order is accepted and is marked as in On progress")
+    return redirect('app:order') 
+
+@login_required
+def complete_order(request,id):
+    order = get_object_or_404(Order,pk=id)
+    order.status = "Delivery"
+    order.save()
+    messages.success(request,"Order iis marked as complete and delivery")
+    return redirect('app:order') 
+
+@login_required
+def cancel_order(request,id):
+    order = get_object_or_404(Order,pk=id)
+    order.status = "Canceled"
+    order.save()
+    messages.success(request,"Order iis marked as cancelled")
+    return redirect('app:order')     

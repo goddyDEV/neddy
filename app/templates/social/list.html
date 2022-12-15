@@ -21,7 +21,8 @@
 </div>     
 <!-- end page title --> 
 <div class="row justify-content-center">
-    <div class="col-lg-12">
+     {% include 'includes/alert.html' %}
+    <div class="col-lg-12 mt-3">
         <div class="card">
             <div class="card-body">
                 <div class="row justify-content-between mb-2">
@@ -55,8 +56,8 @@
                                 <td>{{data.name}}</td>
                                 <td> {{data.link}}</td>
                                  <td>
-                                    <a href="{% url 'app:edit-social' id=data.id %}" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                    <a href="{% url 'app:delete-social' id=data.id %}" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                    <a href="{% url 'app:edit-social' id=data.id %}" class="action-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                    <a href="{% url 'app:delete-social' id=data.id %}" class="action-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"> <i class="mdi mdi-delete"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}

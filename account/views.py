@@ -3,6 +3,7 @@ from .forms import NewUserForm
 from django.contrib.auth import login, authenticate, logout,update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm
 from django.contrib import messages
+from app.models import Settings
 from django.contrib.auth.decorators import login_required
 
 # def signup(request):
@@ -37,7 +38,13 @@ def auth_login(request):
 		else:
 			messages.error(request,"Invalid username or password.")
 	form = AuthenticationForm()
-	return render(request=request, template_name="login.html", context={"form":form})    
+	settings = Settings.objects.first()
+
+	context = {
+		'form':form,
+		'settings':settings,
+	}
+	return render(request=request, template_name="login.html", context={"form":form,'settings':settings})    
 
 
 @login_required

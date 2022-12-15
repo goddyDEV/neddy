@@ -22,10 +22,11 @@
 <!-- end page title -->
 
 <div class="row">
-    <div class="col-lg-4 col-xl-4">
+     {% include 'includes/alert.html' %}
+    <div class="col-lg-4 col-xl-4 mt-3">
         <div class="card text-center">
             <div class="card-body">
-                <img src="{% static './assets/images/users/user-6.jpg' %}" class="rounded-circle avatar-lg img-thumbnail"
+                <img src="{% static './assets/images/users/user-6.png' %}" class="rounded-circle avatar-lg img-thumbnail"
                 alt="profile-image">
 
                 <h4 class="mb-0">{{request.user}}</h4>

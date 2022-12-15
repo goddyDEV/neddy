@@ -32,6 +32,9 @@ urlpatterns = [
 
     path('order/',views.list_order, name='order'),
     path('create-order/',views.create_order, name='create-order'),
+    path('confirm-order/<str:id>',views.confirm_order, name='confirm_order'),
+    path('complete-order/<str:id>',views.complete_order, name='complete_order'),
+    path('cancel-order/<str:id>',views.cancel_order, name='cancel_order'),
 
     path('hero/',views.create_hero, name='hero'),
     path('edit-hero/',views.edit_hero, name='edit-hero'),
