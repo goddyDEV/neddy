@@ -211,7 +211,10 @@ def  create_hero(request):
             return redirect("app:hero")
         else:
             messages.error(request,"Sorry Something is wrong")
-    hero = Hero.objects.first()   
+    try:
+        hero = Hero.objects.first()  
+    except ObjectDoesNotExist:
+        return  messages.error(request,"Create Hero First")        
     form = HeroForm()     
     context = {
         'title':title,
@@ -226,7 +229,10 @@ def  edit_hero(request):
     title = "Edit hero"  
     message = "hero is successfully edited" 
 
-    id=Hero.objects.first()
+    try:
+        id=Hero.objects.first()
+    except ObjectDoesNotExist:
+        return  messages.error(request,"Create Hero First") 
 
     hero = get_object_or_404(Hero, id=id.id)
 
