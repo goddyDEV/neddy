@@ -1,0 +1,96 @@
+
+{% extends 'master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'app:dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'app:order' %}">Order</a></li>
+                    <li class="breadcrumb-item active">Order Detail</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Order Detail</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center pt-3">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-3">Track Order</h4>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-4">
+                            <h5 class="mt-0">Customer:</h5>
+                            <p>{{order.fullname}}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-4">
+                            <h5 class="mt-0">Description:</h5>
+                            <p>{{order.description}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="track-order-list">
+                    <ul class="list-unstyled">
+                        <li class="completed">
+                            <h5 class="mt-0 mb-1">Order Placed</h5>
+                            <p class="text-muted">{{order.created_date}} </p>
+                        </li>
+                        <li class="completed">
+                            <h5 class="mt-0 mb-1">Service</h5>
+                            <p class="text-muted">{{order.service}} </p>
+                        </li>
+
+                        <li class="completed">
+                            <h5 class="mt-0 mb-1">Order Start</h5>
+                            <p class="text-muted">{{order.date_start}}</p>
+                        </li>
+
+
+
+
+                        {% if order.status == 'Delivery' %}
+                        <li class="completed">
+                            <span class="active-dot dot"></span>
+                            <h5 class="mt-0 mb-1">Order Delivery</h5>
+                            <p class="text-muted">{{order.date_delivery}}</p>
+                        </li>
+                        <li class="completed">
+                            <h5 class="mt-0 mb-1"> Order Status</h5>
+                            <p class="text-muted">{{order.status}}</p>
+                        </li>
+                        {% else %}
+                        <li>
+                            <span class="active-dot dot"></span>
+                            <h5 class="mt-0 mb-1">Order Delivery</h5>
+                            <p class="text-muted">{{order.date_delivery}}</p>
+                        </li>
+                        <li>
+                            <h5 class="mt-0 mb-1"> Order Status</h5>
+                            <p class="text-muted">{{order.status}}</p>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+<!--                    <div class="text-center mt-4">-->
+<!--                        <a href="#" class="btn btn-primary">Show Details</a>-->
+<!--                    </div>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

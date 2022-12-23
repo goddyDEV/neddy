@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
+from django.forms import ValidationError
 
 # Create your models here.
 
@@ -13,13 +15,22 @@ class About(models.Model):
         return self.title
 
 
+
 class Hero(models.Model):
     name = models.CharField(max_length=100,null=True, blank=True, unique=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class HeroImage(models.Model):
+    hero = models.ForeignKey(Hero, null=True, blank=True, on_delete=models.CASCADE)
     hero_image = models.ImageField(upload_to="hero/%Y-%m-%d", null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name    
+        return str(self.hero_image)
 
 
 class Testmony(models.Model):
@@ -82,7 +93,7 @@ class Service(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title     
+        return self.title
 
 
 class Team(models.Model):
@@ -113,6 +124,7 @@ class Order(models.Model):
     email = models.EmailField(null=True,blank=True)
     phone = models.CharField(max_length=13, null=True, blank=True)
     service = models.ForeignKey(Service, on_delete=models.PROTECT, null=True, blank=True)
+    description = models.TextField(null=True, blank=True )
     date_start = models.DateField(null=True, blank=True)
     date_delivery = models.DateField()
     status = models.CharField(choices=CHOICE,max_length=100, default="Received")
@@ -121,4 +133,9 @@ class Order(models.Model):
 
     def __str__(self):
         return self.fullname
+
+
+    # @property
+    # def is_past_due(self):
+    #     return date.today() > self.date_start
 

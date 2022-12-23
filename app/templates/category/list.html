@@ -43,9 +43,14 @@
                         </div>
                     </div><!-- end col-->
                 </div> <!-- end row -->
+
             </div>
         </div> <!-- end card -->
     </div><!-- end col-->
+
+
+
+
 </div>
 <!-- end row --> 
     
@@ -71,6 +76,38 @@
         </div> <!-- end card -->
     </div><!-- end col -->
 </div>
+
+ <div class="row justify-content-between mt-3">
+
+        <div class="table-responsive">
+
+                     <table id="selection-datatable" class="table dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                       {% for data in hero_image  %}
+                            <tr>
+                                <td><img src="{{data.hero_image.url}}" alt="logo" class="avatar-xl rounded-circle mb-3"></td>
+                                    <td>
+                                        <a href="{% url 'app:edit_image' data.id %}" class="action-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="mdi mdi-pencil"></i></a>
+
+                                    </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                        </table>
+
+                </div>
+
+    </div>
         
     {% endif %}
           
@@ -101,8 +138,16 @@
                             <li class="parsley-required">{{ error }}</li>
                         </ul>
                         {% endfor %}
+
                     </div>
                             {% endfor %}
+
+                            {{ formset.management_form }}
+                            {% for form in formset %}
+                                {{ form }}
+                            {% endfor %}
+
+
                             <div class="text-end">
                                 <button type="submit" class="btn btn-success waves-effect waves-light">Save</button>
                              

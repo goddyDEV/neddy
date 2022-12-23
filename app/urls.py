@@ -35,10 +35,13 @@ urlpatterns = [
     path('confirm-order/<str:id>',views.confirm_order, name='confirm_order'),
     path('complete-order/<str:id>',views.complete_order, name='complete_order'),
     path('cancel-order/<str:id>',views.cancel_order, name='cancel_order'),
+    path('view-order/<str:id>',views.view_order, name='view_order_details'),
+
 
     path('hero/',views.create_hero, name='hero'),
     path('edit-hero/',views.edit_hero, name='edit-hero'),
     path('delete-hero/<str:id>',views.delete_hero, name='delete-hero'),
+    path('edit-hero-image/<str:id>',views.edit_hero_image, name='edit_image'),
 
     path('social-links/',views.create_link, name='social'),
     path('edit-social-links/<str:id>',views.edit_link, name='edit-social'),

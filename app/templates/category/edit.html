@@ -6,10 +6,10 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{% url 'app:dashboard' %}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Category</li>
+                    <li class="breadcrumb-item active">Hero</li>
                 </ol>
             </div>
-            <h4 class="page-title">Category</h4>
+            <h4 class="page-title">Hero</h4>
         </div>
     </div>
 </div>     
@@ -40,6 +40,10 @@
                     {{ field|add_class:'form-control' }}
                 </div>
                 {% endfor %}
+
+
+
+
 
                 <div class="text-center d-grid">
                     <button class="btn btn-success" type="submit"> Save  </button>

@@ -1,4 +1,6 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render,redirect,get_object_or_404
+from django.forms import modelformset_factory,inlineformset_factory
 from .forms import *
 from django.contrib import messages
 from datetime import date
@@ -18,7 +20,8 @@ def index(request):
     photography = Service.objects.filter(category="Photography")[:3]
     videography = Service.objects.filter(category="Videography").first()
     team = Team.objects.filter(position="Managing Director").first()
-    hero = Hero.objects.first()
+    hero = HeroImage.objects.first()
+    hero_images = HeroImage.objects.exclude(hero_image=hero.hero_image)
     testmony = Testmony.objects.all()
     facebook = SocialMedia.objects.filter(name="facebook").first()
     instagram = SocialMedia.objects.filter(name="instagram").first()
@@ -53,6 +56,7 @@ def index(request):
         'designer':designer,
         'photographer':photographer,
         'videographer':videographer,
+        'hero_images': hero_images,
     }  
     return render(request, template, context)
 
@@ -139,23 +143,28 @@ def get_service(request):
 def  create_about(request):
     template = "about/add.html"
     title = "Create About us"  
-    message = "About is successfully created" 
+    message = "About is successfully created"
+
+    try:
+        about = About.objects.first()
+    except ObjectDoesNotExist:
+        return messages.error(request, "Create About First")
 
     form = AboutForm()
 
     if request.method == "POST":
-        form = AboutForm(request.POST or None)
+        form = AboutForm(request.POST or None, request.FILEs)
         if form.is_valid():
             form.save()
             messages.success(request, message)
             return redirect("app:about")
         else:
             messages.error(request,"Sorry Something is wrong")
-    about = About.objects.first()        
+
     context = {
         'title':title,
         'form':form,
-        'about':about
+        'about': about
     }  
     return render(request, template, context)
 
@@ -169,10 +178,10 @@ def  edit_about(request):
 
     about = get_object_or_404(About, id=about_id.id)
 
-    form = AboutForm(request.POST or None, instance=about)
+    form = AboutForm( instance=about)
 
     if request.method == "POST":
-        form = AboutForm(request.POST or None,instance=about)
+        form = AboutForm(request.POST or None, request.FILES, instance=about)
         if form.is_valid():
             form.save()
             messages.success(request, message)
@@ -198,56 +207,78 @@ def delete_about(request, id):
 @login_required
 def  create_hero(request):
     template = "category/list.html"
-    title = "Create Hero"  
-    message = "Hero is successfully created" 
+    title = "Create Hero"
+    message = "Hero is successfully created"
+
+    ImageFormset = modelformset_factory(HeroImage, form=HeroImageForm, extra=3)
+
+    try:
+        hero = HeroImage.objects.first()
+        hero_image = HeroImage.objects.all()
+    except ObjectDoesNotExist:
+        return messages.error(request, "Create Hero First")
 
     form = HeroForm()
+    formset = ImageFormset(queryset=HeroImage.objects.none())
 
     if request.method == "POST":
-        form = CategoryForm(request.POST or None,request.FILES)
-        if form.is_valid():
-            form.save()
+        form = HeroForm(request.POST or None)
+        formset = ImageFormset(request.POST, request.FILES, queryset=HeroImage.objects.none())
+        if form.is_valid() and formset.is_valid():
+            hero= form.save(commit=False)
+            hero.save()
+
+            for data in formset.cleaned_data:
+                hero_image = data['hero_image']
+                image_save = HeroImage(hero=hero, hero_image=hero_image)
+                image_save.save()
             messages.success(request, message)
             return redirect("app:hero")
         else:
-            messages.error(request,"Sorry Something is wrong")
-    try:
-        hero = Hero.objects.first()  
-    except ObjectDoesNotExist:
-        return  messages.error(request,"Create Hero First")        
-    form = HeroForm()     
+            messages.error(request, form.errors)
+            form = HeroForm()
+            formset = ImageFormset(queryset=HeroImage.objects.none())
+
     context = {
-        'title':title,
-        'form':form,
-        'hero':hero,
-    }  
+        'title': title,
+        'form': form,
+        'hero': hero,
+        'formset': formset,
+        'hero_image': hero_image
+    }
     return render(request, template, context)
 
 @login_required
 def  edit_hero(request):
     template = "category/edit.html"
     title = "Edit hero"  
-    message = "hero is successfully edited" 
+    message = "hero is successfully edited"
+
+
 
     try:
-        id=Hero.objects.first()
+        hero_id = Hero.objects.first()
+
     except ObjectDoesNotExist:
-        return  messages.error(request,"Create Hero First") 
+        return messages.error(request, "Create Hero First")
 
-    hero = get_object_or_404(Hero, id=id.id)
+    # hero = get_object_or_404(Hero, id=id.id)
 
-    form = HeroForm(request.POST or None, request.FILES,instance=hero)
+    form = HeroForm(request.POST or None, instance=hero_id)
+
 
     if request.method == "POST":
+        form = HeroForm(request.POST or None, request.FILES, instance=hero_id)
+
         if form.is_valid():
             form.save()
             messages.success(request, message)
             return redirect("app:hero")
         else:
-            messages.error(request,"Sorry Something is wrong")
+            messages.error(request, form.errors)
     context = {
-        'title':title,
-        'form':form,
+        'title': title,
+        'form': form,
     }  
     return render(request, template, context)    
 
@@ -258,6 +289,29 @@ def delete_hero(request, id):
     hero.delete()
     messages.success(request,message)
     return redirect('app:hero') 
+
+def edit_hero_image(request,id):
+    template = "category/edit.html"
+    title = "Edit hero images"
+    message = "hero image is successfully edited"
+
+    image = get_object_or_404(HeroImage, pk=id)
+
+    form = HeroImageForm(instance=image)
+
+    if request.method == 'POST':
+        form = HeroImageForm(request.POST or None, instance=image)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message)
+            return redirect("app:hero")
+    context = {
+        'title': title,
+        'form': form,
+    }
+    return render(request, template, context)
+
+
 
 
 
@@ -312,7 +366,7 @@ def  edit_testmony(request,id):
 @login_required
 def delete_testmony(request, id):
     message = "Testmony is successfully Deleted" 
-    testmony = get_object_or_404(testmony, pk=id)
+    testmony = get_object_or_404(Testmony, pk=id)
     testmony.delete()
     messages.success(request,message)
     return redirect('app:testmony') 
@@ -384,7 +438,13 @@ def delete_service(request, id):
 def  create_settings(request):
     template = "settings/company.html"
     title = "Create Settings"  
-    message = "Settings is successfully created" 
+    message = "Settings is successfully created"
+
+    try:
+        setting = Settings.objects.first()
+        about = About.objects.first()
+    except ObjectDoesNotExist:
+        return messages.error(request, "Create Setting and About First Before Editing")
 
     form = SettingsForm()
 
@@ -396,13 +456,7 @@ def  create_settings(request):
             return redirect("app:settings")
         else:
             messages.error(request,"Sorry Something is wrong")
-    try:
-        setting = Settings.objects.first()
-        about = About.objects.first()
-    except ObjectDoesNotExist:
-        return  messages.error(request,"Create Setting and About First Before Editing")         
 
-             
     context = {
         'title':title,
         'form':form,
@@ -513,7 +567,7 @@ def create_order(request):
     if request.method == "POST":
         form = OrderForm(request.POST)
         if form.is_valid():
-            order=form.save(commit=False)
+            order = form.save(commit=False)
             if order.date_start > order.date_delivery:
                 messages.error(request, "Sorry the delivery date is before the order date!")
             elif order.date_start < date.today() :
@@ -626,4 +680,16 @@ def cancel_order(request,id):
     order.status = "Canceled"
     order.save()
     messages.success(request,"Order iis marked as cancelled")
-    return redirect('app:order')     
+    return redirect('app:order')
+
+@login_required
+def view_order(request,id):
+    template = "order/view.html"
+
+    order = get_object_or_404(Order,id=id)
+    context = {
+        'order':order,
+    }
+
+    return render(request, template, context)
+
