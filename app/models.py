@@ -26,7 +26,7 @@ class Hero(models.Model):
 
 class HeroImage(models.Model):
     hero = models.ForeignKey(Hero, null=True, blank=True, on_delete=models.CASCADE)
-    hero_image = models.ImageField(upload_to="hero/%Y-%m-%d", null=True, blank=True)
+    hero_image = models.ImageField(upload_to="hero/%Y-%m-%d", default='hero/default.jpg')
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
