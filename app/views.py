@@ -214,7 +214,7 @@ def  create_hero(request):
 
     try:
         hero = HeroImage.objects.first()
-        hero_image = HeroImage.objects.all()
+        hero_images = HeroImage.objects.all()
     except ObjectDoesNotExist:
         return messages.error(request, "Create Hero First")
 
@@ -244,7 +244,7 @@ def  create_hero(request):
         'form': form,
         'hero': hero,
         'formset': formset,
-        'hero_image': hero_image
+        'hero_images': hero_images
     }
     return render(request, template, context)
 

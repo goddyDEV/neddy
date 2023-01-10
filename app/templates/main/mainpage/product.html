@@ -123,7 +123,7 @@
             <div class="portfolio-wrap mb-3">
               <img src="{{data.file.url}}" class="img-fluid" alt="">
               <div class="portfolio-links">
-                <a href="{{data.file.url}}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{data.title}}"><i class="bi bi-plus"></i></a>
+                <a href="{{data.file.url}}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{data.title}}"><i class="bi bi-eye"></i></a>
                 <a href="#" title="More Details"><i class="bi bi-link"></i></a>
               </div>
               <div class="portfolio-info">
@@ -140,9 +140,11 @@
            {% for data in videography  %}
 
             <div class="portfolio-wrap mb-3">
-              <img src="{{data.file.url}}" class="img-fluid" alt="">
+              <video class="img-fluid" controls>
+                  <source src="{{data.file.url}}" type="video/mp4">
+              </video>
               <div class="portfolio-links">
-                <a href="{{data.file.url}}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{data.title}}"><i class="bi bi-plus"></i></a>
+                <a href="{{data.file.url}}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{data.title}}"><i class="bi bi-play"></i></a>
                 <a href="#" title="More Details"><i class="bi bi-link"></i></a>
               </div>
               <div class="portfolio-info">
@@ -160,7 +162,7 @@
             <div class="portfolio-wrap mb-3">
               <img src="{{data.file.url}}" class="img-fluid" alt="">
               <div class="portfolio-links">
-                <a href="{{data.file.url}}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{data.title}}"><i class="bi bi-plus"></i></a>
+                <a href="{{data.file.url}}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{data.title}}"><i class="bi bi-eye"></i></a>
                 <a href="#" title="More Details"><i class="bi bi-link"></i></a>
               </div>
               <div class="portfolio-info">
